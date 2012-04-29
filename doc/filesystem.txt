@@ -2,7 +2,11 @@
 
 * Configuring OpenWRT to Use an External Drive as Root
 
+These instructions are based on the general overview provided by the [[http://wiki.openwrt.org/doc/howto/extroot][OpenWRT wiki]], stripped down to just the options that I have selected.
+
 ** Install modules necessary for USB devices and for filesystems
+
+I am configuring my system to use a standard Linux ext4 filesystem. You will have to format the external drive on a Linux system and then plug it into the router. You're on your own for this.
 
 If building an image, use menuconfig to select the following modules:
 
@@ -19,4 +23,33 @@ install the modules:
   opkg install kmod-usb-storage
   opkg install block-mount
   opkg install kmod-fs-ext4
+#+END_SRC
+
+** Initialize the external filesystem
+
+Because the MR-3020 is only supported by the trunk development version of OpenWRT, "Attitude Adjustment", we have additional choices of how to set up the external filesystem. There are two options: "pivot overlay", which works for Backfire (the current stable release) as well as Attitude Adjustment, or "pivot root", which only works in Attitude Adjustment right now.
+
+I have chosen to use the "pivot root" method. To initialize the external filesystem, copy the standard root filesystem from flash memory to the external drive.
+
+NOTE: This assumes that the new external drive is mounted on /mnt/sda1
+
+#+BEGIN_SRC shell-script
+  mkdir -p /tmp/cproot
+  mount --bind / /tmp/cproot
+  tar -C /tmp/cproot -cvf - . | tar -C /mnt/sda1 -xf -
+  umount /tmp/cproot
+#+END_SRC
+
+** Configuration
+
+All of the configuration necessary to actually run the "pivot root" system that you have built is done in the /etc/config/fstab configuration file. The default fstab that OpenWRT ships with has a "config mount" stanza for a "/home" filesystem; I have replaced that stanza with the following, since /home will just be part of the external drive. 
+
+#+BEGIN_SRC
+config mount
+       option target /
+       option device /dev/sda1
+       option fstype ext4
+       option options rw,sync
+       option enabled 1
+       option enabled_fsck 0
 #+END_SRC
