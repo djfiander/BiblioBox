@@ -7,11 +7,11 @@ config global autoswap
 	option anon_swap 0
 	
 config mount
-	option target	/home
+	option target	/
 	option device	/dev/sda1
 	option fstype	ext4
 	option options	rw,sync
-	option enabled	0
+	option enabled	1
 	option enabled_fsck 0
 
 config swap
