@@ -1,6 +1,6 @@
 
 config system
-	option hostname 'OpenWrt'
+	option hostname 'LibraryBox'
 	option timezone 'UTC'
 
 config timeserver 'ntp'
