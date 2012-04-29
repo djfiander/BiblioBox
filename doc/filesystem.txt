@@ -1,0 +1,22 @@
+-*- mode: org -*-
+
+* Configuring OpenWRT to Use an External Drive as Root
+
+** Install modules necessary for USB devices and for filesystems
+
+If building an image, use menuconfig to select the following modules:
+
+ + Base System -> block-mount
+   + Kernel Modules -> 
+      + Filesystems -> kmod-fs-ext4
+      + USB Support -> kmod-usb-storage
+      + Block Devices -> kmod-scsi-generic
+
+Otherwise, run "opkg install" on your running OpenWRT system to
+install the modules:
+
+#+BEGIN_SRC shell-script
+  opkg install kmod-usb-storage
+  opkg install block-mount
+  opkg install kmod-fs-ext4
+#+END_SRC

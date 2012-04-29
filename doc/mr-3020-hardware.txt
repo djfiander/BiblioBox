@@ -1,0 +1,37 @@
+-*- mode: org -*-
+* Reading the State of the Sliding Switch on an MR-3020
+
+It's actually very easy to read the state of the sliding switch on the
+MR. First you make them available in /sys, and then you just read
+them.
+
+According to the [[http://wiki.openwrt.org/toh/tp-link/tl-mr3020][OpenWRT wiki page]] for the hardware, the sliding
+switch state is reported by two GPIO pins: 18 and 20. To make these
+available in the filesystem, you remove the "gpio_button_hotplug"
+kernel module, then export the buttons:
+
+#+BEGIN_SRC shell-script
+rmmod gpio_button_hotplug
+
+for i in 18 20; do
+   echo $i >/sys/class/gpio/export
+done
+#+END_SRC
+
+There are now two directories, /sys/class/gpio/gpio18 and
+/sys/class/gpio/gpio20. To read from them, just cat the file
+/sys/class/gpio/gpioN/value:
+
+#+BEGIN_SRC shell-script
+$ cat /sys/class/gpio18/value
+1
+#+END_SRC
+
+The values for the sliding switch are as follows:
+
+| Label | GPIO18 | GPIO20 |
+|-------+--------+--------|
+| 3g    |      1 |      0 |
+| WISP  |      0 |      1 |
+| AP    |      1 |      1 |
+
