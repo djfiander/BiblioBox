@@ -1,0 +1,18 @@
+-*- mode: org -*-
+
+* General Project Notes
+
+** Administrator Web Interface
+
+  + add / remove files
+  + usage statistics (no user tracking, but counting downloads?)
+  + Workflow to approve files uploaded by users (see below)?
+
+** Public Web Interface
+
+  + Homepage with general usage instructions for connecting to catalogue server
+  + Upload file page?
+
+** Internals
+
+  + if users can upload files, then system needs to be able to read metadata out of EPUBs.
