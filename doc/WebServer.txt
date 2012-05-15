@@ -1,0 +1,28 @@
+-*- mode: org -*-
+
+* Requirements and General Thoughts about Web Servers
+
+The web server needs to be relatively lightweight, and doesn't need to support a very high load, although it should support multiple simultaneous connections. It's unlikely that the normal use case of the box acting as a standalone document server is going to get hundreds of hits per second.
+
+If the system is going to support a large number of epubs (imagine a library of all the Project Gutenberg EPUBs), then the server would have to be database-driven, but that might be (would almost definitely be) too memory intensive for a small embedded device like the MR 3020.
+
+For smaller collections of books (up to 100 or 200, perhaps), loading the metadata about the entire collection into memory and then serving results based on that will work. This suggest that a server that supports FastCGI is the direction to go in.
+
+[[https://en.wikipedia.org/wiki/Hiawatha_webserver][Hiawatha]] or [[https://en.wikipedia.org/wiki/Nginx][nginx]] are lightweight http servers that seem to be well supported.
+
+PirateBox (and Griffey's LibraryBox) both require Python to be installed. Since the small scripting language lua, which is used for many thing on OpenWRT, doesn't support FastCGI, it makes sense to go with Python for my development as well.
+
+To set up the webserver, do the following:
+
+#+BEGIN_SRC shell-script
+  opkg install python
+  opkg install hiawatha
+  mkdir -p /var/log/hiawatha
+  mkdir -p /var/www/librarybox/log /var/www/librarybox/public
+  cd /tmp
+  wget http://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg
+  sh setuptools-0.6c11-py2.7.egg
+  easy_install flup
+
+  # Insert instructions for configuring hiawatha to connect to flup
+#+END_SRC

@@ -1,0 +1,24 @@
+-*- mode: org -*-
+
+* Introduction
+
+Bibliobox requires the following OpenWRT packages to be
+installed. This list is collected from the various other
+documents in this directory.
+
+* Filesystem
+
+  - kmod-usb-storage
+  - block-mount
+  - kmod-fs-ext4
+
+* Scripting
+
+  - python
+
+* Web Server
+
+  - python
+  - hiawatha
+
+The web server also requires you to install the version of the python "setuptools" that corresponds to the version of python that you installed, and to then install the python "flup" module.
