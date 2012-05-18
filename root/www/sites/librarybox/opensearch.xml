@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+  <ShortName>Search BiblioBox</ShortName>
+   <Description>Search BiblioBox for content</Description>
+   <Contact>david@fiander.info</Contact>
+   <Url type="application/atom+xml;profile=odps-catalog" 
+        template="http://librarybox/catalogue.py?q={searchTerms}&amp;pw={startPage?}&amp;format=atom"/>
+   <Url type="text/html"
+	template="http://librarybox/catalogue.py?q={searchTerms}&amp;pw={startPage?}&amp;format=html"/>
+</OpenSearchDescription>
