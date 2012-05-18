@@ -1,0 +1,7 @@
+-*- mode: org -*-
+
+* The Open Publication Distribution System
+
+The [[http://opds-spec.org][Open Publication Distribution System]] is a protocol that allows e-book servers to share information about their holdings with e-book readers. The protocol is a specialized version of the [[https://tools.ietf.org/html/rfc4287][Atom Syndication Format]].
+
+Because the format is mostly very static, I'm going to use the [[http://www.makotemplates.org/][Mako]] templating system to generate the output.
