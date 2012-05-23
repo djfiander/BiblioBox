@@ -1,0 +1,13 @@
+## -*- coding: utf-8 -*-
+
+<%!
+    from cgi import escape
+%>
+
+
+<h1>FastCGI Environment</h1>
+<table>
+    % for k, v in sorted(environ.items()):
+	<tr><th>${k | h}</th><td>${v | h}</td></tr>
+    % endfor
+</table>
