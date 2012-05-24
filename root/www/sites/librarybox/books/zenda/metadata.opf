@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="uuid_id">
+    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+        <dc:identifier opf:scheme="calibre" id="calibre_id">109</dc:identifier>
+        <dc:identifier opf:scheme="uuid" id="uuid_id">a57a144f-9b82-4bb6-80e9-d34b7b5f2a0f</dc:identifier>
+        <dc:title>The Prisoner of Zenda</dc:title>
+        <dc:creator opf:file-as="Hope, Anthony" opf:role="aut">Anthony Hope</dc:creator>
+        <dc:contributor opf:file-as="calibre" opf:role="bkp">calibre (0.7.50) [http://calibre-ebook.com]</dc:contributor>
+        <dc:date>2009-01-12T05:00:00+00:00</dc:date>
+        <dc:description>&lt;p class="description"&gt;The Prisoner of Zenda is an adventure novel by Anthony Hope, published in 1894. The king of the fictional country of Ruritania is abducted on the eve of his coronation, and the protagonist, an English gentleman on holiday who fortuitously resembles the monarch, is persuaded to act as his political decoy in an attempt to save the situation. The villainous Rupert of Hentzau gave his name to the sequel published in 1898, which is included in some editions of this novel. The books were extremely popular and inspired a new genre of Ruritanian romance, including the Graustark novels by George Barr McCutcheon.&lt;/p&gt;</dc:description>
+        <dc:publisher>Feedbooks</dc:publisher>
+        <dc:language>en</dc:language>
+        <dc:subject>Romance</dc:subject>
+        <dc:subject>Thrillers</dc:subject>
+        <dc:subject>Action &amp; Adventure</dc:subject>
+        <dc:subject>Fiction</dc:subject>
+        <meta content="Zenda" name="calibre:series"/>
+        <meta content="1" name="calibre:series_index"/>
+        <meta content="0" name="calibre:rating"/>
+        <meta content="2010-12-15T19:32:13+00:00" name="calibre:timestamp"/>
+        <meta content="Prisoner of Zenda, The" name="calibre:title_sort"/>
+    </metadata>
+    <guide>
+        <reference href="cover.jpg" type="cover" title="Cover"/>
+    </guide>
+</package>

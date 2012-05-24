@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"
+      xmlns:dc="http://purl.org/dc/terms/"
+      xmlns:opds="http://opds-spec.org/2010/catalog">
+  <id>urn:uuid:433a5d6a-0b8c-4933-af65-4ca4f02763eb</id>
+ 
+  <link rel="self"    
+        href="/static.xml"
+        type="application/atom+xml;profile=opds-catalog;kind=acquisition"/>
+
+  <title>Static list of ebooks</title>
+  <updated>2012-05-24T12:48:00Z</updated>
+  <author>
+    <name>David Fiander</name>
+    <uri>http://opds-spec.org</uri>
+  </author>
+ 
+  <entry>
+    <title>The Prisoner of Zenda</title>
+    <id>urn:uuid:a57a144f-9b82-4bb6-80e9-d34b7b5f2a0f</id>
+    <updated>2012-05-24T12:48:00Z</updated>
+    <author>
+      <name>Anthony Hope</name>
+    </author>
+    <dc:language>en</dc:language>
+    <dc:issued>1894</dc:issued>
+    <category scheme="http://www.bisg.org/standards/bisac_subject/index.html"
+              term="FIC020000"
+              label="FICTION / Men's Adventure"/>
+    <summary>The Prisoner of Zenda is an adventure novel by Anthony Hope, published in 1894. The king of the fictional country of Ruritania is abducted on the eve of his coronation, and the protagonist, an English gentleman on holiday who fortuitously resembles the monarch, is persuaded to act as his political decoy in an attempt to save the situation. The villainous Rupert of Hentzau gave his name to the sequel published in 1898, which is included in some editions of this novel.</summary>
+    <link rel="http://opds-spec.org/image"     
+          href="/books/zenda/cover.jpg"
+          type="image/jpeg"/> 
+ 
+    <link rel="http://opds-spec.org/acquisition" 
+          href="/books/zenda/The+Prisoner+of+Zenda+-+Anthony+Hope.epub"
+          type="application/epub+zip"/>
+  </entry>
+</feed>
