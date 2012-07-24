@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"
+      xmlns:dc="http://purl.org/dc/terms/"
+      xmlns:opds="http://opds-spec.org/2010/catalog">
+  <id>urn:uuid:3b015d2b-e8b7-4d69-9c37-2fe80419d0c4</id>
+  <link rel="self"    
+        href="/catalogue.py?root.xml"
+        type="application/atom+xml;profile=opds-catalog;kind=navigation"/>
+  <link rel="start"
+	href="/catalogue.py?root.xml"
+	type="application/atom+xml;profile=opds-catalogue;kind=navigation" />
+  <title>BiblioBox Catalogue Root</title>
+  <updated>2012-07-24T14:1300Z</updated>
+  <author>
+    <name>David J. Fiander</name>
+  </author>
+
+  <entry>
+    <title>Browse by Title</title>
+    <id>urn:uuid:c5eac971-1866-4a30-a80d-2ca7739ae252</id>
+    <updated>
+      XXX
+    </updated>
+    <author>David J. Fiander</author>
+    <link rel="subsection"
+	  href="/catalogue.py?title.xml"
+	  type="application/atom+xml;profile=opds-catalogue;kind=acquisition"/>
+    <content type="text">
+      The full library, sorted by title.
+    </content>
+  </entry>
+
+  <entry>
+    <title>Browse by Author</title>
+    <id>urn:uuid:02807263-638b-42c9-8e68-cedae61640f7</id>
+    <updated>
+      XXX
+    </updated>
+    <author>David J. Fiander</author>
+    <link rel="subsection"
+	  href="/catalogue.py?author.xml"
+	  type="application/atom+xml;profile=opds-catalogue;kind=navigation"/>
+    <content type="text">
+      The authors represented in the library.
+    </content>
+  </entry>
+</feed>
