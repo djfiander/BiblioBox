@@ -56,5 +56,5 @@ create index works_index on works(citation);
 create index books_index on books(work_id);
 
 create index work_tags_index on work_tags(work_id, tag_id);
-create index tag_index on tags(tag_name);
 
+create index tag_index on tags(tag_name);
