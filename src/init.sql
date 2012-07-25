@@ -2,11 +2,16 @@
 
 create table formats (
        format_id integer primary key,
-       format text
+       format_name text,
+       format_type text
 );
 
-insert into formats (format) values ('EPUB');
-insert into formats (format) values ('PDF');
+insert into formats (format_name, format_type)
+        values ('EPUB', 'application/epub+zip');
+insert into formats (format_name, format_type)
+        values ('PDF', 'application/pdf');
+insert into formats (format_name, format_type)
+       values ('JPEG', 'image/jpeg');
 
 create table authors (
        author_id integer primary key,
@@ -33,7 +38,9 @@ create table books (
        uuid text,
        work_id integer references works(work_id),
        format_id integer references formats(format_id),
-       filename text
+       filename text NOT NULL,
+       cover text,
+       cover_fmt integer references formats(format_id)
 );
 
 create table tags (
