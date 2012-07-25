@@ -6,7 +6,8 @@ from mako.lookup import TemplateLookup
 from flup.server.fcgi import WSGIServer
 
 catlookup = TemplateLookup(directories=['/www/sites/librarybox/templates'],
-                           module_directory='/tmp/librarybox_modules')
+                           module_directory='/tmp/librarybox_modules',
+                           disable_unicode=True)
 
 kindmap = {
     "root.xml" : "navigation",
@@ -22,7 +23,7 @@ def app(environ, start_response):
         ctype = 'application/atom+xml;profile=opds-catalog;kind={}'.format(kindmap[qs])
 
         start_response('200 OK', [('Content-Type', ctype)])
-        yield str(templ.render(environ=environ))
+        yield templ.render(environ=environ)
     else:
         start_response('200 OK', [('Content-Type', 'text/html')])
 
