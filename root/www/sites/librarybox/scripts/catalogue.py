@@ -16,16 +16,22 @@ kindmap = {
 }
 
 def app(environ, start_response):
-    if 'QUERY_STRING' in environ:
-        qs = environ['QUERY_STRING']
+    if ('QUERY_STRING' not in environ) or (environ['QUERY_STRING'] == ''):
+        environ['QUERY_STRING'] = 'root.xml'
 
+    qs = environ['QUERY_STRING']
+
+    try:
         templ = catlookup.get_template(qs)
+        rcode = '200 OK'
         ctype = 'application/atom+xml;profile=opds-catalog;kind={}'.format(kindmap[qs])
+    except:
+        templ = catlookup.get_template('404.html')
+        rcode = '404 Page not found'
+        ctype = 'text/html'
 
-        start_response('200 OK', [('Content-Type', ctype)])
-        yield templ.render(environ=environ)
-    else:
-        start_response('200 OK', [('Content-Type', 'text/html')])
+    start_response(rcode, [('Content-Type', ctype)])
+    yield templ.render(environ=environ)
 
 if __name__ == '__main__':
     WSGIServer(app, bindAddress=("127.0.0.1", 2005)).run()
