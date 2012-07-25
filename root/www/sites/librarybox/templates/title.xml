@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<%!
+    import sqlite3
+
+    query = """SELECT au.author_name as author,
+                      w.citation as title,
+		      w.description as descr,
+		      b.id as book_id,
+		      b.uuid as uuid,
+		      formats.format_name as format,
+		      formats.format_type as ftype,
+		      b.filename as fname,
+		      b.cover as cover,
+		      cf.format_type as cover_fmt
+               FROM authors au, works w, work_authors wa, books b,
+                    formats, formats cf
+               WHERE wa.work_id = wa.author_id
+	             AND b.work_id = w.work_id
+		     AND formats.format_id = b.format_id
+		     AND cf.format_id = b.cover_fmt
+               ORDER BY w.sort_title"""
+%>
 <feed xmlns="http://www.w3.org/2005/Atom"
       xmlns:dc="http://purl.org/dc/terms/"
       xmlns:opds="http://opds-spec.org/2010/catalog">
@@ -19,26 +40,37 @@
   <author>
     <name>David Fiander</name>
   </author>
- 
+  <%
+      conn = sqlite3.connect("/www/sites/librarybox/data/librarybox.db")
+      conn.row_factory = sqlite3.Row
+      conn.text_factory = str
+      c = conn.cursor()
+      c.execute(query)
+  %>
+
+% for entry in c:
   <entry>
-    <title>The Prisoner of Zenda</title>
-    <id>urn:uuid:a57a144f-9b82-4bb6-80e9-d34b7b5f2a0f</id>
+    <title>${entry['title']}</title>
+    <id>urn:uuid:${entry['uuid']}</id>
     <updated>2012-05-24T12:48:00Z</updated>
     <author>
-      <name>Anthony Hope</name>
+      <name>${entry['author']}</name>
     </author>
     <dc:language>en</dc:language>
-    <dc:issued>1894</dc:issued>
-    <category scheme="http://www.bisg.org/standards/bisac_subject/index.html"
-              term="FIC020000"
-              label="FICTION / Men's Adventure"/>
-    <summary>The Prisoner of Zenda is an adventure novel by Anthony Hope, published in 1894. The king of the fictional country of Ruritania is abducted on the eve of his coronation, and the protagonist, an English gentleman on holiday who fortuitously resembles the monarch, is persuaded to act as his political decoy in an attempt to save the situation. The villainous Rupert of Hentzau gave his name to the sequel published in 1898, which is included in some editions of this novel.</summary>
+    % if entry['descr']:
+    <summary>${entry['descr']}</summary>
+    % endif
+    % if entry['cover']:
     <link rel="http://opds-spec.org/image"     
-          href="/books/zenda/cover.jpg"
-          type="image/jpeg"/> 
- 
+          href="${entry['cover']|u}"
+          type="${entry['cover_fmt']}"/> 
+    % endif
     <link rel="http://opds-spec.org/acquisition" 
-          href="/books/zenda/The+Prisoner+of+Zenda+-+Anthony+Hope.epub"
-          type="application/epub+zip"/>
+          href="${entry['fname']|u}"
+          type="${entry['ftype']}"/>
   </entry>
+% endfor
+<%
+    conn.close()
+%>
 </feed>
