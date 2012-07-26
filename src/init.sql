@@ -23,9 +23,12 @@ create table authors (
 
 create table works (
        work_id integer primary key,
+       uuid text,
        sort_title text collate nocase,
        citation text,
-       description text
+       description text,
+       cover text,
+       cover_fmt integer references formats(format_id)
 );
 
 create table work_authors (
@@ -35,12 +38,9 @@ create table work_authors (
 
 create table books (
        id integer primary key,
-       uuid text,
        work_id integer references works(work_id),
        format_id integer references formats(format_id),
-       filename text NOT NULL,
-       cover text,
-       cover_fmt integer references formats(format_id)
+       filename text NOT NULL
 );
 
 create table tags (
