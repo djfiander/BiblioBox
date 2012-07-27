@@ -1,0 +1,45 @@
+<%page args="conn, cursor" />
+
+<%!
+
+    books_query = """SELECT f.format_type as ftype,
+		            b.filename as fname
+		     FROM books b, formats f
+	             WHERE b.work_id = ?
+	                   AND b.format_id = f.format_id
+                     ORDER BY b.format_id"""
+%>
+
+% for work in cursor:
+  <entry>
+    <title>${work['title']}</title>
+    <id>urn:uuid:${work['uuid']}</id>
+    <updated>2012-05-24T12:48:00Z</updated>
+    <author>
+      <name>${work['author']}</name>
+    </author>
+    <dc:language>en</dc:language>
+    % if work['descr']:
+    <summary>${work['descr']}</summary>
+    % endif
+    % if work['cover']:
+    <link rel="http://opds-spec.org/image"     
+          href="${work['cover']|u}"
+          type="${work['cover_fmt']}"/> 
+    % endif
+
+    <%
+        books = conn.cursor()
+	t = (work['work_id'],)
+	books.execute(books_query, t)
+    %>
+
+    % for book in books:
+        <link rel="http://opds-spec.org/acquisition" 
+              href="${book['fname']|u}"
+              type="${book['ftype']}"/>
+    % endfor
+
+    <% books.close() %>
+  </entry>
+% endfor

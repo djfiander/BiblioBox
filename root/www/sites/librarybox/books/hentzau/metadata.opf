@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="uuid_id">
+    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+        <dc:identifier opf:scheme="calibre" id="calibre_id">108</dc:identifier>
+        <dc:identifier opf:scheme="uuid" id="uuid_id">c933237b-c28a-4e42-820b-1824d823bf3e</dc:identifier>
+        <dc:title>Rupert of Hentzau</dc:title>
+        <dc:creator opf:file-as="Hope, Anthony" opf:role="aut">Anthony Hope</dc:creator>
+        <dc:contributor opf:file-as="calibre" opf:role="bkp">calibre (0.7.50) [http://calibre-ebook.com]</dc:contributor>
+        <dc:date>2009-01-12T05:00:00+00:00</dc:date>
+        <dc:description>&lt;p class="description"&gt;Rupert of Hentzau is a sequel by Anthony Hope to The Prisoner of Zenda, written in 1895, but not published until 1898.&lt;br&gt;Queen Flavia, dutifully but unhappily married to her cousin Rudolf V, writes to her true love Rudolf Rassendyll. The letter is carried by von Tarlenheim to be delivered by hand, but it is stolen by the exiled Rupert of Hentzau, who sees in it a chance to return to favour by informing the pathologically jealous and paranoid King.&lt;/p&gt;</dc:description>
+        <dc:publisher>Feedbooks</dc:publisher>
+        <dc:language>en</dc:language>
+        <dc:subject>Fiction</dc:subject>
+        <dc:subject>Romance</dc:subject>
+        <dc:subject>Thrillers</dc:subject>
+        <dc:subject>Action &amp; Adventure</dc:subject>
+        <meta content="Zenda" name="calibre:series"/>
+        <meta content="2" name="calibre:series_index"/>
+        <meta content="0" name="calibre:rating"/>
+        <meta content="2010-12-15T19:32:11+00:00" name="calibre:timestamp"/>
+        <meta content="Rupert of Hentzau" name="calibre:title_sort"/>
+    </metadata>
+    <guide>
+        <reference href="cover.jpg" type="cover" title="Cover"/>
+    </guide>
+</package>

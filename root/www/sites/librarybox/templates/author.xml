@@ -2,46 +2,61 @@
 <%!
     import sqlite3
 
+    author_query= """SELECT au.author_name as name,
+                            au.uuid as uuid
+                     FROM authors au
+                     WHERE au.author_id = ?"""
+
     works_query = """SELECT au.author_name as author,
                             w.citation as title,
-                            w.description as descr,
-                            w.work_id as work_id,
                             w.uuid as uuid,
+			    w.work_id as work_id,
+                            w.description as descr,
                             w.cover as cover,
                             cf.format_type as cover_fmt
-                     FROM authors au, works w, work_authors wa, formats cf
-                     WHERE w.work_id = wa.work_id
-                           AND wa.author_id = au.author_id
+                     FROM authors au, work_authors wa, works w, formats cf
+                     WHERE wa.author_id = ?
+                           and au.author_id = wa.author_id
+                           AND w.work_id = wa.work_id
                            AND cf.format_id = w.cover_fmt
                      ORDER BY w.sort_title"""
+%>
+<%
+      author_id = (params['au'],)
+
+      conn = sqlite3.connect("/www/sites/librarybox/data/librarybox.db")
+      conn.row_factory = sqlite3.Row
+      conn.text_factory = str
+
+      cur = conn.cursor()
+      cur.execute(author_query, author_id)
+      author_info = cur.fetchone()
+      cur.close()
+
 %>
 <feed xmlns="http://www.w3.org/2005/Atom"
       xmlns:dc="http://purl.org/dc/terms/"
       xmlns:opds="http://opds-spec.org/2010/catalog">
-  <id>urn:uuid:433a5d6a-0b8c-4933-af65-4ca4f02763eb</id>
+  <id>urn:uuid:${author_info['uuid']}</id>
  
   <link rel="self"    
-        href="/catalogue.py?title.xml"
+        href="/catalogue.py?author.xml&amp;au=${params['au']}"
         type="application/atom+xml;profile=opds-catalog;kind=acquisition" />
   <link rel="start"
 	href="/catalogue.py?root.xml"
 	type="application/atom+xml;profile=opds-catalogue;kind=navigation" />
   <link rel="up"
-	href="/catalogue.py?root.xml"
+	href="/catalogue.py?authorbrowse.xml"
 	type="application/atom+xml;profile=opds-catalogue;kind=navigation" />
 
-  <title>Browse by Title</title>
+  <title>Works by ${author_info['name']|h}</title>
   <updated>2012-05-24T12:48:00Z</updated>
   <author>
     <name>David Fiander</name>
   </author>
   <%
-      conn = sqlite3.connect("/www/sites/librarybox/data/librarybox.db")
-      conn.row_factory = sqlite3.Row
-      conn.text_factory = str
-
       works = conn.cursor()
-      works.execute(works_query)
+      works.execute(works_query, author_id)
   %>
 
   <%include file="titlelist.xml" args="conn=conn, cursor=works" />

@@ -38,7 +38,7 @@
     </updated>
     <author>David J. Fiander</author>
     <link rel="subsection"
-	  href="/catalogue.py?author.xml"
+	  href="/catalogue.py?authorbrowse.xml"
 	  type="application/atom+xml;profile=opds-catalogue;kind=navigation"/>
     <content type="text">
       The authors represented in the library.

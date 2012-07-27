@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<%
+    import sqlite3
+
+    author_query = """
+        SELECT au.uuid as uuid,
+               au.author_id as id,
+	       au.author_name as name,
+               count(wa.work_id) as titlecount
+        FROM authors au,
+             work_authors wa
+        WHERE
+             au.author_id = wa.author_id
+        GROUP BY wa.author_id
+        ORDER BY au.sort_name
+    """
+%>
+
+<feed xmlns="http://www.w3.org/2005/Atom"
+      xmlns:dc="http://purl.org/dc/terms/"
+      xmlns:opds="http://opds-spec.org/2010/catalog">
+  <id>urn:uuid:02807263-638b-42c9-8e68-cedae61640f7</id>
+ 
+  <link rel="self"    
+        href="/catalogue.py?authorbrowse.xml"
+        type="application/atom+xml;profile=opds-catalog;kind=navigation" />
+  <link rel="start"
+	href="/catalogue.py?root.xml"
+	type="application/atom+xml;profile=opds-catalogue;kind=navigation" />
+  <link rel="up"
+	href="/catalogue.py?root.xml"
+	type="application/atom+xml;profile=opds-catalogue;kind=navigation" />
+
+  <title>Browse by Author</title>
+  <updated>2012-07-27T12:48:00Z</updated>
+  <author>
+    <name>David Fiander</name>
+  </author>
+  <%
+      conn = sqlite3.connect("/www/sites/librarybox/data/librarybox.db")
+      conn.row_factory = sqlite3.Row
+      conn.text_factory = str
+
+      authors = conn.cursor()
+      authors.execute(author_query)
+  %>
+
+% for author in authors:
+    <entry>
+      <id>urn:uuid:${author['uuid']}</id>
+      <title>${author['name']}</title>
+      % if author['titlecount'] == 1:
+          <content type="text"> ${author['titlecount']} title</content>
+      % else:
+          <content type="text"> ${author['titlecount']} titles</content>
+      % endif
+      <link rel="subsection"
+	    href="/catalogue.py?author.xml&amp;au=${author['id']}"
+	    type="application/atom+xml;profile=opds-catalogue;kind=navigation" />
+    </entry>
+% endfor
+  <%
+    authors.close()
+    conn.close()
+  %>
+</feed>
