@@ -2,6 +2,9 @@
 
 from mako.template import Template
 from mako.lookup import TemplateLookup
+from mako import exceptions
+
+import urllib
 
 from flup.server.fcgi import WSGIServer
 
@@ -10,10 +13,18 @@ catlookup = TemplateLookup(directories=['/www/sites/librarybox/templates'],
                            disable_unicode=True)
 
 kindmap = {
+    "author.xml" : "acquisition",
+    "authorbrowse.xml": "navigation",
     "root.xml" : "navigation",
-    "title.xml": "acquisition",
-    "author.xml": "navigation"
+    "title.xml": "acquisition"
 }
+
+def parse_query_string(qs):
+    (templ, fields) = qs.split('&', 1)
+    params = {}
+    for (key, val) in [field.split('=') for field in fields.split('&')]:
+        params[key] = urllib.unquote_plus(val)
+    return (templ, params)
 
 def app(environ, start_response):
     if ('QUERY_STRING' not in environ) or (environ['QUERY_STRING'] == ''):
@@ -21,17 +32,24 @@ def app(environ, start_response):
 
     qs = environ['QUERY_STRING']
 
+    if '&' in qs:
+        (tname, params) = parse_query_string(qs)
+    else:
+        tname = qs
+        params = {}
+
     try:
-        templ = catlookup.get_template(qs)
+        template = catlookup.get_template(tname)
         rcode = '200 OK'
-        ctype = 'application/atom+xml;profile=opds-catalog;kind={}'.format(kindmap[qs])
-    except:
-        templ = catlookup.get_template('404.html')
+        ctype = 'application/atom+xml;profile=opds-catalog;kind={}'.format(kindmap[tname])
+    except exceptions.TemplateLookupException:
+        print exceptions.text_error_template().render()
+        template = catlookup.get_template('404.html')
         rcode = '404 Page not found'
         ctype = 'text/html'
 
     start_response(rcode, [('Content-Type', ctype)])
-    yield templ.render(environ=environ)
+    yield template.render(environ=environ, params=params)
 
 if __name__ == '__main__':
     WSGIServer(app, bindAddress=("127.0.0.1", 2005)).run()
