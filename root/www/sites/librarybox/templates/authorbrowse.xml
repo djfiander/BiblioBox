@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet title="XSL" href="style/style.xml" type="text/xsl"?>
 <%
-    import sqlite3
-
-    author_query = """
-        SELECT au.uuid as uuid,
-               au.author_id as id,
-	       au.author_name as name,
-               count(wa.work_id) as titlecount
-        FROM authors au,
-             work_authors wa
-        WHERE
-             au.author_id = wa.author_id
-        GROUP BY wa.author_id
-        ORDER BY au.sort_name
-    """
+    import queries
 %>
 
 <feed xmlns="http://www.w3.org/2005/Atom"
@@ -36,16 +24,8 @@
   <author>
     <name>David Fiander</name>
   </author>
-  <%
-      conn = sqlite3.connect("/www/sites/librarybox/data/librarybox.db")
-      conn.row_factory = sqlite3.Row
-      conn.text_factory = str
 
-      authors = conn.cursor()
-      authors.execute(author_query)
-  %>
-
-% for author in authors:
+% for author in queries.author_list(conn):
     <entry>
       <id>urn:uuid:${author['uuid']}</id>
       <title>${author['name']}</title>
@@ -59,8 +39,4 @@
 	    type="application/atom+xml;profile=opds-catalogue;kind=navigation" />
     </entry>
 % endfor
-  <%
-    authors.close()
-    conn.close()
-  %>
 </feed>

@@ -1,38 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet title="XSL" href="style/style.xml" type="text/xsl"?>
 <%!
     import sqlite3
-
-    author_query= """SELECT au.author_name as name,
-                            au.uuid as uuid
-                     FROM authors au
-                     WHERE au.author_id = ?"""
-
-    works_query = """SELECT au.author_name as author,
-                            w.citation as title,
-                            w.uuid as uuid,
-			    w.work_id as work_id,
-                            w.description as descr,
-                            w.cover as cover,
-                            cf.format_type as cover_fmt
-                     FROM authors au, work_authors wa, works w, formats cf
-                     WHERE wa.author_id = ?
-                           and au.author_id = wa.author_id
-                           AND w.work_id = wa.work_id
-                           AND cf.format_id = w.cover_fmt
-                     ORDER BY w.sort_title"""
+    import queries
 %>
 <%
-      author_id = (params['au'],)
-
-      conn = sqlite3.connect("/www/sites/librarybox/data/librarybox.db")
-      conn.row_factory = sqlite3.Row
-      conn.text_factory = str
-
-      cur = conn.cursor()
-      cur.execute(author_query, author_id)
-      author_info = cur.fetchone()
-      cur.close()
-
+    author_info = queries.author_info(conn, params['au'])
 %>
 <feed xmlns="http://www.w3.org/2005/Atom"
       xmlns:dc="http://purl.org/dc/terms/"
@@ -54,15 +27,5 @@
   <author>
     <name>David Fiander</name>
   </author>
-  <%
-      works = conn.cursor()
-      works.execute(works_query, author_id)
-  %>
-
-  <%include file="titlelist.xml" args="conn=conn, cursor=works" />
-
-  <%
-    works.close()
-    conn.close()
-  %>
+  <%include file="titlelist.xml" args="tlist=queries.author_works(conn, params['au'])" />
 </feed>

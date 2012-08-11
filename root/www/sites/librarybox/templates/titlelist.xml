@@ -1,16 +1,10 @@
-<%page args="conn, cursor" />
+<%page args="tlist" />
 
 <%!
-
-    books_query = """SELECT f.format_type as ftype,
-		            b.filename as fname
-		     FROM books b, formats f
-	             WHERE b.work_id = ?
-	                   AND b.format_id = f.format_id
-                     ORDER BY b.format_id"""
+import queries
 %>
 
-% for work in cursor:
+% for work in tlist:
   <entry>
     <title>${work['title']}</title>
     <id>urn:uuid:${work['uuid']}</id>
@@ -28,18 +22,10 @@
           type="${work['cover_fmt']}"/> 
     % endif
 
-    <%
-        books = conn.cursor()
-	t = (work['work_id'],)
-	books.execute(books_query, t)
-    %>
-
-    % for book in books:
+    % for book in queries.booklist(conn, work['work_id']):
         <link rel="http://opds-spec.org/acquisition" 
               href="${book['fname']|u}"
               type="${book['ftype']}"/>
     % endfor
-
-    <% books.close() %>
   </entry>
 % endfor
