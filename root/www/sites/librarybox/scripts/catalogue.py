@@ -13,15 +13,6 @@ catlookup = TemplateLookup(directories=['/www/sites/librarybox/templates'],
                            module_directory='/tmp/librarybox_modules',
                            disable_unicode=True)
 
-acq_mime = "application/atom+xml;profile=opds-catalog;kind=acquisition"
-nav_mime = "application/atom+xml;profile=opds-catalog;kind=navigation"
-kindmap = {
-    "author.xml" : acq_mime,
-    "authorbrowse.xml": nav_mime,
-    "root.xml" : nav_mime,
-    "title.xml": acq_mime
-}
-
 def parse_query_string(qs):
     (templ, fields) = qs.split('&', 1)
     params = {}
@@ -43,21 +34,18 @@ def app(environ, start_response):
 
     try:
         template = catlookup.get_template(tname)
-        rcode = '200 OK'
-        ctype = kindmap[tname]
     except exceptions.TemplateLookupException:
         print exceptions.text_error_template().render()
         template = catlookup.get_template('404.html')
         rcode = '404 Page not found'
         ctype = 'text/html'
 
-    start_response(rcode, [('Content-Type', ctype)])
-    
     try:
         conn = sqlite3.connect("/www/sites/librarybox/data/librarybox.db")
         conn.row_factory = sqlite3.Row
         conn.text_factory = str
-        return [template.render(conn=conn, environ=environ, params=params)]
+        return [template.render(start_response=start_response,
+                                conn=conn, environ=environ, params=params)]
     finally:
         conn.close()
 

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<%
+    start_response("200 OK", [('Content-Type', "application/atom+xml;profile=opds-catalog;kind=navigation")])
+%>
 <feed xmlns="http://www.w3.org/2005/Atom"
       xmlns:dc="http://purl.org/dc/terms/"
       xmlns:opds="http://opds-spec.org/2010/catalog">
