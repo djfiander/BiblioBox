@@ -1,0 +1,11 @@
+div.entry {
+    clear: both;
+}
+
+img.cover {
+    float: left;
+}
+
+.title {
+    font-style: italic;
+}

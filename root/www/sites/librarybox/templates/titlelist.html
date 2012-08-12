@@ -1,0 +1,17 @@
+<%page args="tlist" />
+<%!
+    import queries
+%>
+
+% for work in tlist:
+    <div class="entry">
+	% if work['cover']:
+	  <img class="cover" src="${work['cover']|u}" />
+	% endif
+	<p><span class="author">${work['author']}</span>. <span class="title">${work['title']}</span>
+	    % for book in queries.booklist(conn, work['work_id']):
+	      <a class="format" href="${book['fname']|u}">${book['fmt_name']}</a>
+	    % endfor
+	</p>
+    </div>
+% endfor
