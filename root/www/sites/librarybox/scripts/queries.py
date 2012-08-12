@@ -15,6 +15,7 @@ title_query = """SELECT au.author_name as author,
                  ORDER BY w.sort_title"""
 
 books_query = """SELECT f.format_type as ftype,
+                        f.format_name as fmt_name,
                         b.filename as fname
                  FROM books b, formats f
                  WHERE b.work_id = ?
