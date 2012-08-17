@@ -1,11 +1,19 @@
 div.entry {
     clear: both;
+    min-height: 100px;
+}
+
+p {
+    margin: 10px;
 }
 
 img.cover {
     float: left;
+    height: 100px;
+    margin: 0px 10px;
 }
 
 .title {
     font-style: italic;
+    font-variant: small-caps
 }
