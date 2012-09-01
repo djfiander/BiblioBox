@@ -6,10 +6,12 @@ import xml.etree.ElementTree as ET
 
 DCprefix = '{http://purl.org/dc/elements/1.1/}'
 OPFprefix = '{http://www.idpf.org/2007/opf}'
+Containerprefix = '{urn:oasis:names:tc:opendocument:xmlns:container}'
 
 namespace_map = {
     'dc': 'http://purl.org/dc/elements/1.1/',
-    'opf':'http://www.idpf.org/2007/opf'
+    'opf':'http://www.idpf.org/2007/opf',
+    'container': 'urn:oasis:names:tc:opendocument:xmlns:container'
 }
 
 
@@ -26,15 +28,21 @@ def is_epubfile(fname):
         info = zf.getinfo("mimetype")
 
         fd = zf.open(info, 'r')
-        if fd.readline().rstrip() == "application/epub+zip":
-            return True
-        else:
+        if fd.readline().rstrip() != "application/epub+zip":
+            return False
+        fd.close()
+
+        fd = zf.open(zf.getinfo("META-INF/container.xml"), 'r')
+        root = ET.parse(fd).getroot()
+        if root.tag != Containerprefix + 'container':
             return False
     except KeyError:
-        # There's no "mimetype" file in the zipfile
+        # One of the required files is missing from the zip file
         return False
     finally:
         zf.close()
+
+    return True
 
 def find_opf(efile):
     """Returns EpubInfo object corresponding to the OPF file in EFILE"""
@@ -53,11 +61,22 @@ class EpubFile(zipfile.ZipFile):
         root = ET.parse(self.open(self.opf)).getroot()
         meta = root.find(OPFprefix + 'metadata')
         self.metadata = {}
-        self.metadata['title'] = meta.find(DCprefix + 'title').text
-        for creator in meta.findall(DCprefix + 'creator'):
-            if (creator.attrib[OPFprefix + 'role']) == 'aut':
-                self.metadata['author'] = creator.text
-                break
+        elt = meta.find(DCprefix + 'title')
+        self.metadata['title'] = elt.text if elt else None
+
+        elt = meta.find(DCprefix + 'description')
+        self.metadata['description'] = elt.text if elt else None
+
+        elt = meta.find(DCprefix+'creator')
+        if elt:
+            # default author is first creator
+            self.metadata['author'] = elt.text
+            # I cheat and assume that books only have one author.
+            for creator in meta.findall(DCprefix + 'creator'):
+                if (creator.get(OPFprefix + 'role')) == 'aut':
+                    self.metadata['author'] = creator.text
+                    break
+
         id_name = root.attrib['unique-identifier']
         for ident in meta.findall(DCprefix + 'identifier'):
             if ident.attrib['id'] == id_name:
@@ -81,5 +100,5 @@ class EpubFile(zipfile.ZipFile):
 
 # register_namespace() is new in Python 2.7
 if 'register_namespace' in ET.__dict__:
-    for (prefix, uri) in namespace_map:
+    for (prefix, uri) in namespace_map.items():
         ET.register_namespace(prefix, uri)
