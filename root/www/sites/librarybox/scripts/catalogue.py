@@ -26,11 +26,7 @@ def app(environ, start_response):
 
     qs = environ['QUERY_STRING']
 
-    if '&' in qs:
-        (tname, params) = parse_query_string(qs)
-    else:
-        tname = qs
-        params = {}
+    (tname, params) = parse_query_string(qs) if '&' in qs else (qs, {})
 
     try:
         template = catlookup.get_template(tname)
@@ -50,4 +46,4 @@ def app(environ, start_response):
         conn.close()
 
 if __name__ == '__main__':
-    WSGIServer(app, bindAddress=("127.0.0.1", 2005)).run()
+    WSGIServer(app, bindAddress=("127.0.0.1", 8080)).run()
