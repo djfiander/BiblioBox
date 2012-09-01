@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<%
-    start_response("200 OK", [('Content-Type', "application/atom+xml;profile=opds-catalog;kind=navigation")])
-%>
 <feed xmlns="http://www.w3.org/2005/Atom"
       xmlns:dc="http://purl.org/dc/terms/"
       xmlns:opds="http://opds-spec.org/2010/catalog">
   <id>urn:uuid:3b015d2b-e8b7-4d69-9c37-2fe80419d0c4</id>
   <link rel="self"    
-        href="/catalogue.py?root.xml"
+        href="/cat"
         type="application/atom+xml;profile=opds-catalog;kind=navigation"/>
   <link rel="start"
-	href="/catalogue.py?root.xml"
+	href="/cat"
 	type="application/atom+xml;profile=opds-catalogue;kind=navigation" />
   <title>BiblioBox Catalogue Root</title>
   <updated>2012-07-24T14:1300Z</updated>
@@ -26,7 +23,7 @@
     </updated>
     <author>David J. Fiander</author>
     <link rel="subsection"
-	  href="/catalogue.py?title.xml"
+	  href="/cat/title"
 	  type="application/atom+xml;profile=opds-catalogue;kind=acquisition"/>
     <content type="text">
       The full library, sorted by title.
@@ -41,7 +38,7 @@
     </updated>
     <author>David J. Fiander</author>
     <link rel="subsection"
-	  href="/catalogue.py?authorbrowse.xml"
+	  href="/cat/author"
 	  type="application/atom+xml;profile=opds-catalogue;kind=navigation"/>
     <content type="text">
       The authors represented in the library.

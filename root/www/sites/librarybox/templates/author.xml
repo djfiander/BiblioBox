@@ -3,9 +3,7 @@
     import queries
 %>
 <%
-    start_response("200 OK", [('Content-Type', "application/atom+xml;profile=opds-catalog;kind=acquisition")])
-    
-    author_info = queries.author_info(conn, params['au'])
+    author_info = queries.author_info(conn, author_id)
 %>
 <feed xmlns="http://www.w3.org/2005/Atom"
       xmlns:dc="http://purl.org/dc/terms/"
@@ -13,13 +11,13 @@
   <id>urn:uuid:${author_info['uuid']}</id>
  
   <link rel="self"    
-        href="/catalogue.py?author.xml&amp;au=${params['au']}"
+        href="/cat/author/${author_id}"
         type="application/atom+xml;profile=opds-catalog;kind=acquisition" />
   <link rel="start"
-	href="/catalogue.py?root.xml"
+	href="/cat"
 	type="application/atom+xml;profile=opds-catalogue;kind=navigation" />
   <link rel="up"
-	href="/catalogue.py?authorbrowse.xml"
+	href="/cat/author"
 	type="application/atom+xml;profile=opds-catalogue;kind=navigation" />
 
   <title>Works by ${author_info['name']|h}</title>
@@ -27,5 +25,5 @@
   <author>
     <name>David Fiander</name>
   </author>
-  <%include file="titlelist.xml" args="tlist=queries.author_works(conn, params['au'])" />
+  <%include file="titlelist.xml" args="tlist=queries.author_works(conn, author_id)" />
 </feed>

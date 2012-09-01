@@ -2,6 +2,7 @@
 
 <%!
 import queries
+from urllib import quote
 %>
 
 % for work in tlist:
@@ -18,13 +19,13 @@ import queries
     % endif
     % if work['cover']:
     <link rel="http://opds-spec.org/image"     
-          href="${work['cover']|u}"
+          href="${work['cover']|quote}"
           type="${work['cover_fmt']}"/> 
     % endif
 
     % for book in queries.booklist(conn, work['work_id']):
         <link rel="http://opds-spec.org/acquisition" 
-              href="${book['fname']|u}"
+              href="${book['fname']|quote}"
               type="${book['ftype']}"/>
     % endfor
   </entry>

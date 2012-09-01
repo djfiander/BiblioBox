@@ -1,49 +1,77 @@
 #!/usr/bin/env python
 
+from sys import stderr
+
+import bottle
+from bottle import route
+
+import sqlite3
+
 from mako.template import Template
 from mako.lookup import TemplateLookup
 from mako import exceptions
 
-import sqlite3
-import urllib
+opds_acq = "application/atom+xml;profile=opds-catalog;kind=acquisition"
+opds_nav = "application/atom+xml;profile=opds-catalog;kind=navigation"
 
-from flup.server.fcgi import WSGIServer
-
-catlookup = TemplateLookup(directories=['/www/sites/librarybox/templates'],
+catlookup = TemplateLookup(directories=['./templates',
+                                        '/www/sites/librarybox/templates'],
                            module_directory='/tmp/librarybox_modules',
                            disable_unicode=True)
 
-def parse_query_string(qs):
-    (templ, fields) = qs.split('&', 1)
-    params = {}
-    for (key, val) in [field.split('=') for field in fields.split('&')]:
-        params[key] = urllib.unquote_plus(val)
-    return (templ, params)
-
-def app(environ, start_response):
-    if ('QUERY_STRING' not in environ) or (environ['QUERY_STRING'] == ''):
-        environ['QUERY_STRING'] = 'root.xml'
-
-    qs = environ['QUERY_STRING']
-
-    (tname, params) = parse_query_string(qs) if '&' in qs else (qs, {})
-
-    try:
-        template = catlookup.get_template(tname)
-    except exceptions.TemplateLookupException:
-        print exceptions.text_error_template().render()
-        template = catlookup.get_template('404.html')
-        rcode = '404 Page not found'
-        ctype = 'text/html'
-
+def _render(tmpl, **args):
     try:
         conn = sqlite3.connect("/www/sites/librarybox/data/librarybox.db")
-        conn.row_factory = sqlite3.Row
-        conn.text_factory = str
-        return [template.render(start_response=start_response,
-                                conn=conn, environ=environ, params=params)]
+    except sqlite3.OperationalError:
+        conn = sqlite3.connect("./data/librarybox.db")
+
+    conn.row_factory = sqlite3.Row
+    conn.text_factory = str
+    try:
+        return tmpl.render(conn=conn, **args)
     finally:
         conn.close()
 
-if __name__ == '__main__':
-    WSGIServer(app, bindAddress=("127.0.0.1", 8080)).run()
+@route('/admin/test')
+def wtf():
+    bottle.response.set_header('content-type', 'text/plain')
+    return "\n".join(' '.join([k, str(v)]) for (k, v) in bottle.request.environ.items())
+
+@route('/cat')
+def index():
+    stderr.write("index!\n")
+    bottle.response.set_header('Content-Type', opds_nav)
+    template = catlookup.get_template("root.xml")
+    return _render(template)
+
+@route('/cat/title')
+def title():
+    stderr.write("title!\n")
+    bottle.response.set_header('Content-Type', opds_acq)
+    template = catlookup.get_template("title.xml")
+    return _render(template)
+
+@route('/cat/author')
+@route('/cat/author/<au>')
+def author(au=None):
+    stderr.write("author!\n")
+    if 'au' in bottle.request.params:
+        au = bottle.request.params['au']
+
+    if au:
+        bottle.response.set_header('Content-Type', opds_acq)
+        template = catlookup.get_template("author.xml")
+    else:
+        bottle.response.set_header('Content-Type', opds_nav)
+        template = catlookup.get_template("authorbrowse.xml")
+        
+    return(_render(template, author_id=au))
+
+bottle.debug(True)
+
+import socket
+
+if socket.gethostname().lower() == 'librarybox':
+    bottle.run(server='flup', host='0.0.0.0', port=8080, debug=True)
+else:
+    bottle.run()

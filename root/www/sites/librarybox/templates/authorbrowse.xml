@@ -2,23 +2,19 @@
 <%!
     import queries
 %>
-
-<%
-    start_response("200 OK", [('Content-Type', "application/atom+xml;profile=opds-catalog;kind=navigation")])
-%>
 <feed xmlns="http://www.w3.org/2005/Atom"
       xmlns:dc="http://purl.org/dc/terms/"
       xmlns:opds="http://opds-spec.org/2010/catalog">
   <id>urn:uuid:02807263-638b-42c9-8e68-cedae61640f7</id>
  
   <link rel="self"    
-        href="/catalogue.py?authorbrowse.xml"
+        href="/cat/author"
         type="application/atom+xml;profile=opds-catalog;kind=navigation" />
   <link rel="start"
-	href="/catalogue.py?root.xml"
+	href="/cat"
 	type="application/atom+xml;profile=opds-catalogue;kind=navigation" />
   <link rel="up"
-	href="/catalogue.py?root.xml"
+	href="/cat"
 	type="application/atom+xml;profile=opds-catalogue;kind=navigation" />
 
   <title>Browse by Author</title>
@@ -37,7 +33,7 @@
           <content type="text"> ${author['titlecount']} titles</content>
       % endif
       <link rel="subsection"
-	    href="/catalogue.py?author.xml&amp;au=${author['id']}"
+	    href="/cat/author/${author['id']}"
 	    type="application/atom+xml;profile=opds-catalogue;kind=navigation" />
     </entry>
 % endfor
