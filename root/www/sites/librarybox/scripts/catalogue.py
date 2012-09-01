@@ -1,49 +1,60 @@
 #!/usr/bin/env python
 
+import cherrypy
+
+import sqlite3
+
 from mako.template import Template
 from mako.lookup import TemplateLookup
 from mako import exceptions
-
-import sqlite3
-import urllib
-
-from flup.server.fcgi import WSGIServer
 
 catlookup = TemplateLookup(directories=['/www/sites/librarybox/templates'],
                            module_directory='/tmp/librarybox_modules',
                            disable_unicode=True)
 
-def parse_query_string(qs):
-    (templ, fields) = qs.split('&', 1)
-    params = {}
-    for (key, val) in [field.split('=') for field in fields.split('&')]:
-        params[key] = urllib.unquote_plus(val)
-    return (templ, params)
+class Catalogue:
+    def index(self):
+        template = catlookup.get_template("chroot.xml")
+        return self._render(template)
+    index.exposed = True
 
-def app(environ, start_response):
-    if ('QUERY_STRING' not in environ) or (environ['QUERY_STRING'] == ''):
-        environ['QUERY_STRING'] = 'root.xml'
+    def test(self):
+        pass
 
-    qs = environ['QUERY_STRING']
+    def title(self):
+        template = catlookup.get_template("chtitle.xml")
+        return self._render(template)
+    title.exposed = True
 
-    (tname, params) = parse_query_string(qs) if '&' in qs else (qs, {})
+    def author(self, au=None):
+        if au:
+            template = catlookup.get_template("chauthor.xml")
+        else:
+            template = catlookup.get_template("chauthorbrowse.xml")
+            
+        return(self._render(template, author_id=au))
+    author.exposed = True
 
-    try:
-        template = catlookup.get_template(tname)
-    except exceptions.TemplateLookupException:
-        print exceptions.text_error_template().render()
-        template = catlookup.get_template('404.html')
-        rcode = '404 Page not found'
-        ctype = 'text/html'
-
-    try:
+    def _render(self, tmpl, **args):
         conn = sqlite3.connect("/www/sites/librarybox/data/librarybox.db")
-        conn.row_factory = sqlite3.Row
-        conn.text_factory = str
-        return [template.render(start_response=start_response,
-                                conn=conn, environ=environ, params=params)]
-    finally:
-        conn.close()
+        try:
+            conn.row_factory = sqlite3.Row
+            conn.text_factory = str
+            return tmpl.render(conn=conn, **args)
+        finally:
+            conn.close()
 
-if __name__ == '__main__':
-    WSGIServer(app, bindAddress=("127.0.0.1", 8080)).run()
+class Root:
+    pass
+
+# root = Root()
+# root.cat = Catalogue()
+
+cherrypy.config.update({'engine.autoreload_on': False,
+                        'log.screen': True})
+
+cherrypy.tree.mount(Catalogue(), '/cat', {'/':
+                                   {
+                                       'tools.trailing_slash.on': False
+                                   }
+                               })
