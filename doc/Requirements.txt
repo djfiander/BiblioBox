@@ -22,3 +22,5 @@ documents in this directory.
   - hiawatha
 
 The web server also requires you to install the version of the python "setuptools" that corresponds to the version of python that you installed, and to then install the python "flup" module.
+
+The application is now written using the Bottle micro-framework for some basic HTTP process and URL dispatching services. It also use the Bottle SQLite3 plugin to simplify writing handlers that have to talk to the database. Neither of these is availble from the standard OpenWRT package repository, so go to http://bottlepy.org to download the source of both of them, and then install them on the librarybox using their setup.py scripts.
