@@ -1,10 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<%!
-    import queries
-%>
-<%
-    author_info = queries.author_info(conn, author_id)
-%>
 <feed xmlns="http://www.w3.org/2005/Atom"
       xmlns:dc="http://purl.org/dc/terms/"
       xmlns:opds="http://opds-spec.org/2010/catalog">
@@ -25,5 +19,5 @@
   <author>
     <name>David Fiander</name>
   </author>
-  <%include file="titlelist.xml" args="tlist=queries.author_works(conn, author_id)" />
+  <%include file="titlelist.xml" args="tlist=cursor" />
 </feed>

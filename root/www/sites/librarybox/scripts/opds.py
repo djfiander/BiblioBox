@@ -9,7 +9,9 @@ import urllib
 
 import bottle
 from bottle import route
+
 from catutils import catdb, catrender
+import queries
 
 opds_acq = "application/atom+xml;profile=opds-catalog;kind=acquisition"
 opds_nav = "application/atom+xml;profile=opds-catalog;kind=navigation"
@@ -24,7 +26,11 @@ def index():
 def title():
     stderr.write("title!\n")
     bottle.response.set_header('Content-Type', opds_acq)
-    return catrender("title.xml")
+    conn = catdb()
+    try:
+        return catrender("title.xml", cursor = queries.titlelist(conn))
+    finally:
+        conn.close()
 
 @route('/title/<id>/<fmt>')
 def fetch_title(id, fmt):
@@ -52,12 +58,19 @@ def author(au=None):
     if 'au' in bottle.request.params:
         au = bottle.request.params['au']
 
-    if au:
-        bottle.response.set_header('Content-Type', opds_acq)
-        template = "author.xml"
-    else:
-        bottle.response.set_header('Content-Type', opds_nav)
-        template = "authorbrowse.xml"
-        
-    return(catrender(template, author_id=au))
-
+    conn = catdb()
+    try:
+        if au:
+            bottle.response.set_header('Content-Type', opds_acq)
+            template = "author.xml"
+            author_info = queries.author_info(conn, au)
+            cur = queries.author_works(conn, au)
+        else:
+            bottle.response.set_header('Content-Type', opds_nav)
+            template = "authorbrowse.xml"
+            author_info = None
+            cur = queries.author_list(conn)
+        return(catrender(template, cursor=cur, author_id=au,
+                         author_info=author_info))
+    finally:
+        conn.close()

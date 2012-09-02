@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<%!
-    import queries
-%>
 <feed xmlns="http://www.w3.org/2005/Atom"
       xmlns:dc="http://purl.org/dc/terms/"
       xmlns:opds="http://opds-spec.org/2010/catalog">
@@ -23,5 +20,5 @@
     <name>David Fiander</name>
   </author>
   
-  <%include file="titlelist.xml" args="tlist=queries.titlelist(conn)" />
+  <%include file="titlelist.xml" args="tlist=cursor" />
 </feed>
