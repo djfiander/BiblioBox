@@ -15,7 +15,7 @@ catlookup = TemplateLookup(directories=['./templates',
                            module_directory='/tmp/librarybox_modules',
                            disable_unicode=True)
 
-def catrender(tmpl, **args):
+def catdb():
     try:
         conn = sqlite3.connect("/www/sites/librarybox/data/librarybox.db")
     except sqlite3.OperationalError:
@@ -23,7 +23,15 @@ def catrender(tmpl, **args):
 
     conn.row_factory = sqlite3.Row
     conn.text_factory = str
+    return conn
+
+def catrender(tmpl, **args):
+    conn = db_connect()
     try:
+        if isinstance(tmp, basestring):
+            tmpl = catlookup(tmpl)
+
         return tmpl.render(conn=conn, **args)
     finally:
         conn.close()
+
