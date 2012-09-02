@@ -26,10 +26,10 @@ def catdb():
     return conn
 
 def catrender(tmpl, **args):
-    conn = db_connect()
+    conn = catdb()
     try:
-        if isinstance(tmp, basestring):
-            tmpl = catlookup(tmpl)
+        if isinstance(tmpl, basestring):
+            tmpl = catlookup.get_template(tmpl)
 
         return tmpl.render(conn=conn, **args)
     finally:
