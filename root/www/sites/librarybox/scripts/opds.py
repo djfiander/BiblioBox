@@ -64,6 +64,8 @@ def author(au=None):
             bottle.response.set_header('Content-Type', opds_acq)
             template = "author.xml"
             author_info = queries.author_info(conn, au)
+            if author_info is None:
+                bottle.abort(404, 'Unknown author id')
             cur = queries.author_works(conn, au)
         else:
             bottle.response.set_header('Content-Type', opds_nav)
