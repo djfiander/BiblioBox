@@ -8,13 +8,13 @@
   <id>urn:uuid:02807263-638b-42c9-8e68-cedae61640f7</id>
  
   <link rel="self"    
-        href="/cat/author"
+        href="/opds/author"
         type="application/atom+xml;profile=opds-catalog;kind=navigation" />
   <link rel="start"
-	href="/cat"
+	href="/opds"
 	type="application/atom+xml;profile=opds-catalogue;kind=navigation" />
   <link rel="up"
-	href="/cat"
+	href="/opds"
 	type="application/atom+xml;profile=opds-catalogue;kind=navigation" />
 
   <title>Browse by Author</title>
@@ -33,7 +33,7 @@
           <content type="text"> ${author['titlecount']} titles</content>
       % endif
       <link rel="subsection"
-	    href="/cat/author/${author['id']}"
+	    href="/opds/author/${author['id']}"
 	    type="application/atom+xml;profile=opds-catalogue;kind=navigation" />
     </entry>
 % endfor

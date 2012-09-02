@@ -8,13 +8,13 @@
   <id>urn:uuid:433a5d6a-0b8c-4933-af65-4ca4f02763eb</id>
  
   <link rel="self"    
-        href="/cat/title"
+        href="/opds/title"
         type="application/atom+xml;profile=opds-catalog;kind=acquisition" />
   <link rel="start"
-	href="/cat"
+	href="/opds"
 	type="application/atom+xml;profile=opds-catalogue;kind=navigation" />
   <link rel="up"
-	href="/cat"
+	href="/opds"
 	type="application/atom+xml;profile=opds-catalogue;kind=navigation" />
 
   <title>Browse by Title</title>

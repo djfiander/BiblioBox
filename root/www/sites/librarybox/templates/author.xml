@@ -11,13 +11,13 @@
   <id>urn:uuid:${author_info['uuid']}</id>
  
   <link rel="self"    
-        href="/cat/author/${author_id}"
+        href="/opds/author/${author_id}"
         type="application/atom+xml;profile=opds-catalog;kind=acquisition" />
   <link rel="start"
-	href="/cat"
+	href="/opds"
 	type="application/atom+xml;profile=opds-catalogue;kind=navigation" />
   <link rel="up"
-	href="/cat/author"
+	href="/opds/author"
 	type="application/atom+xml;profile=opds-catalogue;kind=navigation" />
 
   <title>Works by ${author_info['name']|h}</title>
