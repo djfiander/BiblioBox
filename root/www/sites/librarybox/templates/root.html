@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<%
-     start_response("200 OK", [('Content-Type', 'text/html')])
-%>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:dc="http://purl.org/dc/terms/"
       xmlns:opds="http://opds-spec.org/2010/catalog">
   <head>
     <title>BiblioBox Catalogue</title>
-    <link rel="self" href="/root.html" />
-    <link rel="start" href="/root.html" />
+    <link rel="self" href="/cat" />
+    <link rel="start" href="/cat" />
     <link rel="stylesheet" type="text/css" href="/style/style.css" />
   </head>
   <body>
   <h1>BiblioBox Catalogue Root</h1>
 
   <div class="entry">
-    <p><a class="title" href="/catalogue.py?title.html">Browse by
+    <p><a class="title" href="/cat/title">Browse by
     Title</a></p>
     <p class="abstract">The full library, sorted by title.</p>
   </div>
 
   <div class="entry">
-    <p><a class="title" href="/catalogue.py?author.html">Browse
+    <p><a class="title" href="/cat/author">Browse
     by Author</a></p>
     <p class="abstract">Select from the authors available in the library.</p>
   </div>

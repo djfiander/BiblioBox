@@ -1,18 +1,19 @@
 <%page args="tlist" />
 <%!
     import queries
+    from urllib import quote
 %>
 
 % for work in tlist:
     <div class="entry">
 	% if work['cover']:
-	  <img class="cover" src="${work['cover']|u}" />
+	  <img class="cover" src="${work['cover']|quote}" />
 	% endif
 	<p><span class="author">${work['author']}</span>. 
            <span class="title">${work['title']}</span></p>
         <p>
 	    % for book in queries.booklist(conn, work['work_id']):
-	      <a class="format" href="${book['fname']|u}">${book['fmt_name']}</a>
+	      <a class="format" href="${book['fname']|quote}">${book['fmt_name']}</a>
 	    % endfor
 	</p>
     </div>

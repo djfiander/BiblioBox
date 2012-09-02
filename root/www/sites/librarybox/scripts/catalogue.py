@@ -25,12 +25,20 @@ import opds
 opds_app = bottle.default_app.pop()
 
 #
+# HTML interface, lives under '/cat'
+#
+bottle.default_app.push()
+import html
+html_app = bottle.default_app.pop()
+
+#
 # Mount the apps at the right spots in the URL hierarchy and get
 # the thing running
 #
 root = bottle.Bottle()
-root.mount(opds_app, '/opds')
 root.mount(admin_app, '/admin')
+root.mount(opds_app, '/opds')
+root.mount(html_app, '/cat')
 
 bottle.debug(True)
 
