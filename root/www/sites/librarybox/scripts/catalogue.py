@@ -47,4 +47,4 @@ import socket
 if socket.gethostname().lower() == 'librarybox':
     bottle.run(root, server='flup', host='0.0.0.0', port=8080, debug=True)
 else:
-    bottle.run(root)
+    bottle.run(root, host='0.0.0.0')
